@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vercel Node.js Sample</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f7f2;
+        --panel: #ffffff;
+        --text: #1c1c1c;
+        --muted: #666050;
+        --accent: #0f766e;
+        --border: #d9d5ca;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, #d1fae5, transparent 28%),
+          linear-gradient(180deg, #faf9f4 0%, var(--bg) 100%);
+      }
+
+      main {
+        max-width: 760px;
+        margin: 48px auto;
+        padding: 0 20px;
+      }
+
+      .hero,
+      .panel {
+        background: color-mix(in srgb, var(--panel) 92%, transparent);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+      }
+
+      .hero {
+        padding: 32px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(30px, 4vw, 46px);
+        line-height: 1.05;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.7;
+      }
+
+      .panel {
+        padding: 24px;
+      }
+
+      .meta {
+        margin-top: 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 12px;
+        margin: 20px 0 16px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      code,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      pre {
+        margin: 0;
+        padding: 16px;
+        overflow: auto;
+        border-radius: 14px;
+        background: #111827;
+        color: #e5eefc;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <p class="meta">Vercel + Node.js sample</p>
+        <h1>Node.js API を Vercel で動かす最小サンプル</h1>
+        <p>
+          このページのボタンから <code>/api/hello</code> を呼び出し、Vercel
+          Function が返す JSON を確認できます。
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="button-row">
+          <button id="loadButton" type="button">API を呼び出す</button>
+        </div>
+        <pre id="result">まだ実行していません。</pre>
+      </section>
+    </main>
+
+    <script>
+      const loadButton = document.getElementById("loadButton");
+      const result = document.getElementById("result");
+
+      async function loadHello() {
+        result.textContent = "読み込み中...";
+
+        try {
+          const response = await fetch("/api/hello");
+          const data = await response.json();
+          result.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          result.textContent = JSON.stringify(
+            {
+              error: "API call failed",
+              detail: error instanceof Error ? error.message : String(error)
+            },
+            null,
+            2
+          );
+        }
+      }
+
+      loadButton.addEventListener("click", loadHello);
+    </script>
+  </body>
+</html>
